@@ -1,0 +1,30 @@
+:root {
+  --bg: #E5E5E5;
+  --surface: #FFFFFF;
+  --fg: #222222;
+  --muted: #888888;
+  --border: #CCCCCC;
+  --accent: #0000FF;
+  --sidebar-bg: #CEE3F8;
+  --announce-bg: #FFFFDD;
+  --announce-border: #EED680;
+  --gain: #00A000;
+  --loss: #CC0000;
+  --link: #0000FF;
+  --link-visited: #551A8B;
+  --btn-face: #EFEFEF;
+  --btn-border: #999999;
+  --banner-bg: #336699;
+  --banner-fg: #FFFF00;
+  --chart-bg: #F8F8F8;
+
+  --font-display: Verdana, Arial, Helvetica, sans-serif;
+  --font-body: Verdana, Arial, Helvetica, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+  --font-banner: Impact, 'Arial Black', Haettenschweiler, sans-serif;
+
+  --fs-body: 12px;
+  --fs-small: 11px;
+  --fs-title: 13px;
+  --container: 960px;
+}

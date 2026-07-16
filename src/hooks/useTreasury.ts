@@ -37,7 +37,7 @@ export function useTreasury(claimableEpochId: bigint | undefined, userAddress?: 
         client.readContract({
           address: env.treasury,
           abi: treasuryAbi,
-          functionName: 'EPOCH_DURATION',
+          functionName: 'epochDuration',
         }),
       ]);
 

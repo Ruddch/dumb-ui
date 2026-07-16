@@ -41,7 +41,7 @@ export function ProtocolSidebar() {
         <StatRow label="Lot threshold" value={`${formatUsdAmount(data.lotThreshold)} USDG`} />
         <hr className="dotted-rule" />
         <p style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)' }}>
-          {env.tokenSymbol} on Robinhood Chain. Swap fees → NVDA LP → buyback &amp; burn {env.tokenSymbol}.
+          {env.tokenSymbol} on Robinhood Chain. Hook fees → NVDA (80% LP / 20% dividends) → buyback &amp; burn {env.tokenSymbol}.
         </p>
       </Module>
 

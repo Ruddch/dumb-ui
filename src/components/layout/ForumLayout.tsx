@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 import { injected } from 'wagmi/connectors';
@@ -26,8 +26,20 @@ export function ForumLayout({ breadcrumb, children, sidebar }: ForumLayoutProps)
   const { connect, isPending: connecting } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain } = useSwitchChain();
+  const [caCopied, setCaCopied] = useState(false);
 
   const wrongChain = isConnected && chainId !== env.chainId;
+
+  const copyCa = async () => {
+    if (!env.stratToken) return;
+    try {
+      await navigator.clipboard.writeText(env.stratToken);
+      setCaCopied(true);
+      window.setTimeout(() => setCaCopied(false), 1500);
+    } catch {
+      /* ignore */
+    }
+  };
 
   return (
     <>
@@ -39,9 +51,19 @@ export function ForumLayout({ breadcrumb, children, sidebar }: ForumLayoutProps)
       <div className="member-bar">
         {env.tokenSymbol}
         <span className="sep">|</span>
-        Chain <span className="num">{env.chainId}</span>
+        Chain <span className="num">{robinhoodChain.name}</span>
         <span className="sep">|</span>
         Token <span className="num">{env.tokenSymbol}</span>
+        <span className="sep">|</span>
+        CA{' '}
+        <button
+          type="button"
+          className="ca-copy-btn num"
+          title="Click to copy contract address"
+          onClick={copyCa}
+        >
+          {caCopied ? 'copied!' : env.stratToken}
+        </button>
         <span className="sep">|</span>
         <a href={TWITTER_URL} target="_blank" rel="noopener noreferrer">@DumbMoneyGroup</a>
         <span className="sep">|</span>

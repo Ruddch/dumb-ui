@@ -174,6 +174,7 @@ export const lotReaderAbi = [
           { name: 'status', type: 'uint8' },
           { name: 'usdgAmount', type: 'uint256' },
           { name: 'nvdaAmount', type: 'uint256' },
+          { name: 'nvdaToDividends', type: 'uint256' },
           { name: 'lpTokenId', type: 'uint256' },
           { name: 'tickLower', type: 'int24' },
           { name: 'tickUpper', type: 'int24' },
@@ -201,6 +202,7 @@ export const lotReaderAbi = [
           { name: 'usdgInvested', type: 'uint256' },
           { name: 'usdgReceived', type: 'uint256' },
           { name: 'nvdaPurchased', type: 'uint256' },
+          { name: 'nvdaToDividends', type: 'uint256' },
           { name: 'tickLower', type: 'int24' },
           { name: 'tickUpper', type: 'int24' },
           { name: 'openedAt', type: 'uint256' },
@@ -283,25 +285,25 @@ export const treasuryAbi = [
   },
   {
     type: 'function',
-    name: 'EPOCH_DURATION',
+    name: 'epochDuration',
     stateMutability: 'view',
     inputs: [],
     outputs: [{ type: 'uint256' }],
   },
 ] as const;
 
+/** LotManager.LotStatus — Accumulating → Ready → NvdaPurchased → LPActive → Closed */
 export const LOT_STATUS_LABELS: Record<number, string> = {
   0: 'Accumulating',
   1: 'Ready',
   2: 'NvdaPurchased',
   3: 'LPActive',
-  4: 'LPConverted',
-  5: 'Repositioning',
-  6: 'Closed',
+  4: 'Closed',
 };
 
 export const POOL_FEE_BPS = 30;
 export const SLIPPAGE_BUFFER_BPS = 50;
-export const STARTING_BUY_FEE_BPS = 9500;
+/** Defaults match StrategyHook (flat 10% buy/sell; admin can restore decay via setFeeParams). */
+export const STARTING_BUY_FEE_BPS = 1000;
 export const RESTING_BUY_FEE_BPS = 1000;
 export const FEE_DECAY_BPS_PER_MIN = 100;

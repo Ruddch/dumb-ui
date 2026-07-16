@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   useAccount,
+  useConnect,
   useReadContract,
   useSwitchChain,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 import { env } from '../../config/env';
 import { erc20Abi, stratTokenAbi, v4SwapExecutorAbi } from '../../lib/contracts';
 import { formatBps, formatTokenAmount, parseDecimalInput } from '../../lib/format';
@@ -61,6 +63,7 @@ type SwapTicketProps = {
 
 export function SwapTicket({ compact, defaultSide = 'buy', showHistory = !compact }: SwapTicketProps) {
   const { address, isConnected, chainId } = useAccount();
+  const { connect, isPending: connecting } = useConnect();
   const { switchChain } = useSwitchChain();
   const stats = useProtocolStats();
 
@@ -186,11 +189,17 @@ export function SwapTicket({ compact, defaultSide = 'buy', showHistory = !compac
     }
   }, [isSuccess, txHash]);
 
+  const TRADING_PAUSED = true;
+
   const executeSwap = () => {
     setErr('');
     setOk('');
+    if (TRADING_PAUSED) {
+      setErr('Trading is not active yet.');
+      return;
+    }
     if (!isConnected || !address) {
-      setErr('Connect wallet first, ape.');
+      connect({ connector: injected(), chainId: env.chainId });
       return;
     }
     if (chainId !== env.chainId) {
@@ -309,8 +318,21 @@ export function SwapTicket({ compact, defaultSide = 'buy', showHistory = !compac
         {feeWarning === 'warn' && <div className="warn-box">High buy fee ({formatBps(hookFeeBps)}). Consider waiting for decay.</div>}
         {feeWarning === 'danger' && <div className="warn-box danger">Anti-snipe zone: buy fee {formatBps(hookFeeBps)}. Wait for fee decay before aping.</div>}
 
-        <button type="submit" className={`btn-swap ${side === 'buy' ? 'buy-mode' : 'sell-mode'}`} disabled={isPending || confirming}>
-          {!isConnected ? 'CONNECT WALLET' : isPending || confirming ? 'CONFIRMING…' : needsApprove ? `APPROVE ${paySymbol(side)}` : `SWAP · ${side.toUpperCase()}`}
+        <button
+          type="submit"
+          className={`btn-swap ${side === 'buy' ? 'buy-mode' : 'sell-mode'}`}
+          disabled={TRADING_PAUSED || isPending || confirming || connecting}
+          title={TRADING_PAUSED ? 'Trading is not active' : undefined}
+        >
+          {TRADING_PAUSED
+            ? 'TRADING NOT ACTIVE'
+            : !isConnected
+              ? (connecting ? 'CONNECTING…' : 'CONNECT WALLET')
+              : isPending || confirming
+                ? 'CONFIRMING…'
+                : needsApprove
+                  ? `APPROVE ${paySymbol(side)}`
+                  : `SWAP · ${side.toUpperCase()}`}
         </button>
 
         <div className={`err${err ? ' show' : ''}`} role="alert">{err}</div>

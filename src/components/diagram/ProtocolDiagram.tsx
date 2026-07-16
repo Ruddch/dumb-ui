@@ -8,13 +8,9 @@ function LoopArrow() {
   return <span className="loop-arrow" aria-hidden="true">&gt;</span>;
 }
 
-function LoopPlus() {
-  return <span className="loop-plus" aria-hidden="true">+</span>;
-}
-
 /**
- * Forum-post flywheel — matches reference layout:
- * swap fees → buy NVDA → open LP → LP → 100% USDG → close LP → buyback → burn
+ * Forum-post flywheel — matches NVDA Strategy v2:
+ * swap fees → buy NVDA → 80% LP / 20% treasury → LP → 100% USDG → close → buyback → burn
  */
 export function ProtocolDiagram() {
   return (
@@ -60,15 +56,13 @@ export function ProtocolDiagram() {
             </div>
 
             <div className="loop-subsection">
-              <p className="loop-subsection-label">from hook fees — protocol split</p>
+              <p className="loop-subsection-label">after NVDA buy — 80% LP · 20% dividends</p>
               <div className="loop-row loop-row--secondary">
-                <LoopBox>27% treasury</LoopBox>
+                <LoopBox>20% NVDA treasury</LoopBox>
                 <LoopArrow />
-                <LoopBox>dividends</LoopBox>
+                <LoopBox>NVDA dividends</LoopBox>
                 <LoopArrow />
                 <LoopBox>paid to holders</LoopBox>
-                <LoopPlus />
-                <LoopBox>10% ops</LoopBox>
               </div>
             </div>
           </div>

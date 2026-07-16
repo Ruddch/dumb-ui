@@ -8,6 +8,7 @@ export type ActiveLot = {
   status: number;
   usdgAmount: bigint;
   nvdaAmount: bigint;
+  nvdaToDividends: bigint;
   lpTokenId: bigint;
   tickLower: number;
   tickUpper: number;
@@ -22,6 +23,7 @@ export type ClosedLot = {
   usdgInvested: bigint;
   usdgReceived: bigint;
   nvdaPurchased: bigint;
+  nvdaToDividends: bigint;
   tickLower: number;
   tickUpper: number;
   openedAt: bigint;

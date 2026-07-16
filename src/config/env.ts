@@ -16,9 +16,10 @@ export const env = {
   nvda: import.meta.env.VITE_NVDA as `0x${string}`,
   lotManager: import.meta.env.VITE_LOT_MANAGER as `0x${string}`,
   lpPositionManager: import.meta.env.VITE_LP_POSITION_MANAGER as `0x${string}`,
-  tokenSymbol: 'NVDASTR',
+  tokenSymbol: (import.meta.env.VITE_TOKEN_SYMBOL as string) || 'NVDASTR',
   usdgDecimals: Number(import.meta.env.VITE_USDG_DECIMALS ?? 6),
   stratDecimals: 18,
+  nvdaDecimals: Number(import.meta.env.VITE_NVDA_DECIMALS ?? 18),
   poolFee: 3000,
   tickSpacing: 60,
 } as const;

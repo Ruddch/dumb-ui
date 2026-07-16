@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   useAccount,
+  useConnect,
   usePublicClient,
   useSwitchChain,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 import { ForumLayout } from '../components/layout/ForumLayout';
 import { Module, StatRow } from '../components/layout/Module';
 import { env } from '../config/env';
@@ -17,12 +19,11 @@ import {
   lookupClaim,
   parseProofText,
 } from '../lib/dividends';
-import { formatTokenAmount, formatUsdAmount, parseDecimalInput } from '../lib/format';
-
-const EPOCH_SEC = 7 * 24 * 60 * 60;
+import { formatTokenAmount, parseDecimalInput } from '../lib/format';
 
 export function ClaimPage() {
   const { address, isConnected, chainId } = useAccount();
+  const { connect, isPending: connecting } = useConnect();
   const { switchChain } = useSwitchChain();
   const client = usePublicClient();
   const treasury = useTreasury(undefined, address);
@@ -30,6 +31,9 @@ export function ClaimPage() {
   const claimableEpoch = treasury.data?.claimableEpoch ?? 0n;
   const epoch = treasury.data?.epoch;
   const userClaim = treasury.data?.userClaim;
+  const epochDays = treasury.data?.epochDuration
+    ? Number(treasury.data.epochDuration) / 86400
+    : 7;
 
   const [weightedBal, setWeightedBal] = useState('');
   const [claimAmt, setClaimAmt] = useState('');
@@ -79,14 +83,14 @@ export function ClaimPage() {
   }, [isSuccess, txHash]);
 
   const weightedRaw = parseDecimalInput(weightedBal, env.stratDecimals);
-  const claimRaw = parseDecimalInput(claimAmt, env.usdgDecimals);
+  const claimRaw = parseDecimalInput(claimAmt, env.nvdaDecimals);
   const proof = parseProofText(proofText);
 
   const handleClaim = async () => {
     setErr('');
     setOk('');
     if (!isConnected || !address) {
-      setErr('Connect wallet first.');
+      connect({ connector: injected(), chainId: env.chainId });
       return;
     }
     if (chainId !== env.chainId) {
@@ -135,10 +139,12 @@ export function ClaimPage() {
     <>
       <Module title="How dividends work">
         <p style={{ fontSize: 'var(--fs-small)' }}>
-          27% of hook fees go to Treasury. Every 7 days an epoch ends, gets finalized with a Merkle root, then {env.tokenSymbol} holders claim USDG proportional to weighted balance.
+          On each lot execute, 20% of purchased NVDA goes to Treasury. Every {epochDays} days an epoch ends,
+          gets finalized with a Merkle root, then {env.tokenSymbol} holders claim <strong>NVDA</strong> proportional to weighted balance.
         </p>
         <hr className="dotted-rule" />
-        <StatRow label="Epoch length" value="7 days" />
+        <StatRow label="Epoch length" value={`${epochDays} days`} />
+        <StatRow label="Payout token" value="NVDA" />
         <StatRow label="Claim window" value="previous epoch only" />
         <StatRow label="Leaf hash" value="keccak256(addr, weight, amt)" />
       </Module>
@@ -160,7 +166,7 @@ export function ClaimPage() {
     >
       <Module title="Dividend claim desk — TreasuryV2" announce>
         <p style={{ fontSize: 'var(--fs-small)' }}>
-          Claim USDG dividends for the active finalized epoch. You need a valid Merkle proof for your wallet.
+          Claim NVDA dividends for the active finalized epoch. You need a valid Merkle proof for your wallet.
         </p>
       </Module>
 
@@ -183,8 +189,8 @@ export function ClaimPage() {
 
       {epoch && claimableEpoch > 0n && (
         <Module title={`Epoch #${claimableEpoch.toString()} snapshot`}>
-          <StatRow label="Total dividends" value={`${formatUsdAmount(epoch.totalDividends)} USDG`} />
-          <StatRow label="Already claimed" value={`${formatUsdAmount(epoch.claimedAmount)} USDG`} />
+          <StatRow label="Total dividends" value={`${formatTokenAmount(epoch.totalDividends, env.nvdaDecimals, 4)} NVDA`} />
+          <StatRow label="Already claimed" value={`${formatTokenAmount(epoch.claimedAmount, env.nvdaDecimals, 4)} NVDA`} />
           <StatRow label="Finalized" value={epoch.isFinalized ? 'yes' : 'no'} />
           <StatRow label="Claimable" value={epoch.isClaimable ? 'YES' : 'no'} tone={epoch.isClaimable ? 'up' : undefined} />
           <StatRow label="Merkle root" value={<span style={{ fontSize: 9 }}>{epoch.merkleRoot}</span>} />
@@ -206,7 +212,7 @@ export function ClaimPage() {
       {claimableEpoch === 0n && !treasury.isLoading && (
         <Module title="Nothing to claim">
           <p style={{ fontSize: 'var(--fs-small)' }}>
-            No finalized claimable epoch. Treasury pays out after owner finalizes the previous 7-day epoch with a Merkle root.
+            No finalized claimable epoch. Treasury pays out NVDA after owner finalizes the previous epoch with a Merkle root.
           </p>
         </Module>
       )}
@@ -219,7 +225,7 @@ export function ClaimPage() {
 
           {userClaim?.hasClaimed ? (
             <div className="ok show" style={{ display: 'block' }}>
-              Already claimed {formatUsdAmount(userClaim.claimAmount)} USDG
+              Already claimed {formatTokenAmount(userClaim.claimAmount, env.nvdaDecimals, 4)} NVDA
               {userClaim.weightedBalance > 0n && (
                 <> · weighted {formatTokenAmount(userClaim.weightedBalance, env.stratDecimals)} {env.tokenSymbol}</>
               )}
@@ -238,7 +244,7 @@ export function ClaimPage() {
                 <label>Claim amount</label>
                 <div className="field-row">
                   <input type="text" inputMode="decimal" value={claimAmt} onChange={(e) => setClaimAmt(e.target.value)} placeholder="0.00" />
-                  <span className="unit">USDG</span>
+                  <span className="unit">NVDA</span>
                 </div>
               </div>
 
@@ -264,10 +270,10 @@ export function ClaimPage() {
               <button
                 type="button"
                 className="btn-swap buy-mode"
-                disabled={isPending || confirming || !isConnected}
+                disabled={isPending || confirming || connecting}
                 onClick={handleClaim}
               >
-                {!isConnected ? 'CONNECT WALLET' : isPending || confirming ? 'CONFIRMING…' : 'CLAIM USDG DIVIDENDS'}
+                {!isConnected ? (connecting ? 'CONNECTING…' : 'CONNECT WALLET') : isPending || confirming ? 'CONFIRMING…' : 'CLAIM NVDA DIVIDENDS'}
               </button>
 
               <div className={`err${err ? ' show' : ''}`} role="alert">{err}</div>
@@ -279,8 +285,8 @@ export function ClaimPage() {
 
       <Module title="Epoch calendar">
         <p style={{ fontSize: 'var(--fs-small)' }}>
-          Epochs last {EPOCH_SEC / 86400} days. Only <strong>currentEpoch − 1</strong> can be claimed once finalized.
-          Unclaimed USDG rolls into the next epoch.
+          Epochs last {epochDays} days. Only <strong>currentEpoch − 1</strong> can be claimed once finalized.
+          Unclaimed NVDA rolls into the next epoch.
         </p>
       </Module>
     </ForumLayout>

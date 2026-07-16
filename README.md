@@ -28,7 +28,7 @@ Open http://localhost:5173
 | `/swap` | Full swap desk — USDG ↔ NVDASTR, live hook fee, auto slippage |
 | `/lots` | Protocol lots via LotReader (requires deploy) |
 | `/charts` | NVDASTR/USDG + NVDA/USDG live spot + illustrative SVG charts |
-| `/claim` | TreasuryV2 Merkle dividend claims (USDG) |
+| `/claim` | TreasuryV2 Merkle dividend claims (**NVDA**) |
 
 ## Wallet
 
@@ -44,7 +44,7 @@ Connect MetaMask/Rabby. App expects **Robinhood Chain (4663)**. Use the member b
 
 ## Dividends (`/claim`)
 
-TreasuryV2 pays USDG in 7-day epochs. After owner finalizes an epoch with a Merkle root, holders claim via `claimDividends(epochId, weightedBalance, claimAmount, proof)`.
+TreasuryV2 pays **NVDA** (not USDG) in epochs (default 7 days). On each lot execute, 20% of purchased NVDA goes to Treasury. After owner finalizes an epoch with a Merkle root, holders claim via `claimDividends(epochId, weightedBalance, claimAmount, proof)`.
 
 Host a manifest JSON per epoch and set:
 
@@ -52,24 +52,18 @@ Host a manifest JSON per epoch and set:
 VITE_DIVIDENDS_MANIFEST_URL=https://your-host/dividends/epoch-{epochId}.json
 ```
 
-Manifest format (see `public/dividends/example-manifest.json`):
-
-```json
-{
-  "epochId": 1,
-  "claims": {
-    "0xYourAddress": {
-      "weightedBalance": "1000.0",
-      "claimAmount": "12.50",
-      "proof": ["0x...", "0x..."]
-    }
-  }
-}
-```
+Manifest format (see `public/dividends/example-manifest.json`). `claimAmount` is in **NVDA** human units (18 decimals on-chain).
 
 Leaf: `keccak256(abi.encodePacked(address, weightedBalance, claimAmount))` with raw uint256 values.
 
 Manual proof paste is supported if no manifest URL is set.
+
+## Protocol model (v2)
+
+- Hook fees: flat **10%** buy/sell by default (20% ops / 80% FeeCollector → LotManager)
+- Lot execute: **80%** NVDA → concentrated LP below price · **20%** NVDA → Treasury
+- Lot statuses: `Accumulating → Ready → NvdaPurchased → LPActive → Closed`
+- Stale: `repositionStaleLot` force-closes + liquidates to buyback (not a range re-open)
 
 ## LotReader (for /lots page)
 

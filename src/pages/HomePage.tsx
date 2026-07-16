@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ForumLayout } from '../components/layout/ForumLayout';
 import { Module } from '../components/layout/Module';
 import { ProtocolSidebar } from '../components/layout/ProtocolSidebar';
-import { SwapTicket } from '../components/swap/SwapTicket';
 import { ProtocolDiagram } from '../components/diagram/ProtocolDiagram';
 
 export function HomePage() {
@@ -14,7 +13,7 @@ export function HomePage() {
     >
       <Module title="Welcome to DUMB MONEY" announce>
         <p style={{ fontSize: 'var(--fs-body)' }}>
-          <strong>{env.tokenSymbol}</strong> on Robinhood Chain. Swap {env.tokenSymbol}, fees buy NVDA and open LP — when LP goes 100% USDG, close → buyback → burn.
+          <strong>{env.tokenSymbol}</strong> on Robinhood Chain. Swap {env.tokenSymbol}; fees buy NVDA (80% LP / 20% dividends) — when LP goes 100% USDG, close → buyback → burn.
         </p>
         <p style={{ fontSize: 'var(--fs-small)', marginTop: 6 }}>
           Full protocol docs → <Link to="/docs">DOCS</Link>
@@ -22,10 +21,6 @@ export function HomePage() {
       </Module>
 
       <ProtocolDiagram />
-
-      <Module title="Swap ticket — quick trade">
-        <SwapTicket compact />
-      </Module>
     </ForumLayout>
   );
 }

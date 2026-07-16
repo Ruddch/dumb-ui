@@ -55,6 +55,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: bold; }
   padding: 4px 8px;
 }
 .member-bar .sep { color: var(--muted); margin: 0 6px; }
+.member-bar .ca-copy-btn {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  color: var(--link);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+.member-bar .ca-copy-btn:hover { text-decoration: none; }
 
 .forum-nav {
   background: var(--btn-face);
@@ -610,3 +622,53 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: bold; }
   font-family: var(--font-mono);
   letter-spacing: 0.03em;
 }
+
+/* Docs */
+.docs-toc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-small);
+}
+.docs-toc a {
+  color: var(--link);
+  text-decoration: none;
+}
+.docs-toc a:hover { text-decoration: underline; }
+.docs-anchor {
+  display: block;
+  position: relative;
+  top: -8px;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+.docs-prose {
+  font-size: var(--fs-body);
+  line-height: 1.5;
+}
+.docs-prose h3 {
+  font-size: var(--fs-small);
+  font-weight: bold;
+  margin: 12px 0 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px dotted var(--border);
+  color: var(--fg);
+}
+.docs-prose h3:first-child { margin-top: 0; }
+.docs-prose p { margin: 0 0 8px; }
+.docs-prose ul {
+  margin: 0 0 10px 18px;
+  padding: 0;
+}
+.docs-prose ul li { margin-bottom: 4px; }
+.docs-prose code,
+.docs-addr {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.docs-table { margin: 8px 0 12px; }
+.docs-table td:nth-child(2),
+.docs-table th:nth-child(2) { text-align: left; }
+.docs-table td:nth-child(3),
+.docs-table th:nth-child(3) { text-align: left; font-family: var(--font-body); }

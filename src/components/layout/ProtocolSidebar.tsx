@@ -41,7 +41,7 @@ export function ProtocolSidebar() {
         <StatRow label="Lot threshold" value={`${formatUsdAmount(data.lotThreshold)} USDG`} />
         <hr className="dotted-rule" />
         <p style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)' }}>
-          NVDA Strategy v2 on Robinhood Chain. Swap fees → NVDA LP → buyback &amp; burn {env.tokenSymbol}.
+          {env.tokenSymbol} on Robinhood Chain. Swap fees → NVDA LP → buyback &amp; burn {env.tokenSymbol}.
         </p>
       </Module>
 
@@ -50,7 +50,6 @@ export function ProtocolSidebar() {
         <p style={{ fontSize: 'var(--fs-small)', marginTop: 4 }}><Link to="/swap">→ Swap desk</Link></p>
         <p style={{ fontSize: 'var(--fs-small)', marginTop: 4 }}><Link to="/lots">→ Protocol lots</Link></p>
         <p style={{ fontSize: 'var(--fs-small)', marginTop: 4 }}><Link to="/claim">→ Claim dividends</Link></p>
-        <p style={{ fontSize: 'var(--fs-small)', marginTop: 4 }}><Link to="/charts">→ Charts</Link></p>
         <p style={{ fontSize: 'var(--fs-small)', marginTop: 4 }}>
           <a href={TWITTER_URL} target="_blank" rel="noopener noreferrer">→ @DumbMoneyGroup on X</a>
         </p>

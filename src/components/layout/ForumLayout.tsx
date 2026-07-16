@@ -17,7 +17,6 @@ const NAV = [
   { to: '/', label: 'HOME' },
   { to: '/swap', label: 'SWAP' },
   { to: '/lots', label: 'LOTS' },
-  { to: '/charts', label: 'CHARTS' },
   { to: '/claim', label: 'CLAIM' },
 ];
 
@@ -34,11 +33,11 @@ export function ForumLayout({ breadcrumb, children, sidebar }: ForumLayoutProps)
     <>
       <header className="banner-strip">
         <div className="banner-title">DUMB MONEY</div>
-        <div className="banner-tagline">NVDA Strategy v2 · swap fees → NVDA LP → buyback &amp; burn · not financial advice</div>
+        <div className="banner-tagline">NVDASTR · swap fees → NVDA LP → buyback &amp; burn · not financial advice</div>
       </header>
 
       <div className="member-bar">
-        NVDA Strategy v2
+        {env.tokenSymbol}
         <span className="sep">|</span>
         Chain <span className="num">{env.chainId}</span>
         <span className="sep">|</span>
@@ -93,7 +92,7 @@ export function ForumLayout({ breadcrumb, children, sidebar }: ForumLayoutProps)
       </div>
 
       <footer className="forum-foot">
-        <p>&copy; 2026 DUMB MONEY Protocol · NVDA Strategy v2 on {robinhoodChain.name}. Not affiliated with Reddit, Robinhood, or your broker.</p>
+        <p>&copy; 2026 DUMB MONEY Protocol · {env.tokenSymbol} on {robinhoodChain.name}. Not affiliated with Reddit, Robinhood, or your broker.</p>
         <p>On-chain UI. Numbers from Robinhood Chain mainnet. NFA.</p>
         <p>
           <a href={TWITTER_URL} target="_blank" rel="noopener noreferrer">X / Twitter · @DumbMoneyGroup</a>

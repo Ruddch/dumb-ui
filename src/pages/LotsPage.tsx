@@ -85,7 +85,7 @@ export function LotsPage() {
               return (
                 <article className="lot-card" key={lot.lotId.toString()}>
                   <div className="lot-card-head">
-                    <span><span className="ticker">NVDA</span> · Lot #{lot.lotId.toString()}</span>
+                    <span><span className="ticker">{env.tokenSymbol}</span> · Lot #{lot.lotId.toString()}</span>
                     <span className={`lot-badge ${lot.status === 3 ? 'open' : 'partial'}`}>
                       {LOT_STATUS_LABELS[lot.status] ?? lot.status}
                       {lot.fullyConverted ? ' · CONVERTED' : ''}
@@ -113,7 +113,6 @@ export function LotsPage() {
                   <div className="lot-actions">
                     <Link to="/swap" className="btn btn-ok">Buy {env.tokenSymbol}</Link>
                     <Link to="/swap?side=sell" className="btn btn-danger">Sell {env.tokenSymbol}</Link>
-                    <Link to="/charts" className="btn">Chart</Link>
                   </div>
                 </article>
               );

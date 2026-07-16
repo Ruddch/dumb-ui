@@ -12,10 +12,10 @@ export function DocsPage() {
       breadcrumb={<>You are here: <Link to="/">Home</Link> &gt; <strong>Docs</strong></>}
       sidebar={<ProtocolSidebar />}
     >
-      <Module title="★ Protocol docs — DUMB MONEY / NVDA Strategy v2" announce>
+      <Module title={`★ Protocol docs — DUMB MONEY / ${env.tokenSymbol}`} announce>
         <ol className="rules-list">
           <li>Nothing here is financial advice.</li>
-          <li><strong>NVDA Strategy v2</strong> on <strong>Robinhood Chain</strong> (4663). Trade {env.tokenSymbol}/USDG; hook fees power the flywheel below.</li>
+          <li><strong>{env.tokenSymbol}</strong> on <strong>Robinhood Chain</strong> (4663). Trade {env.tokenSymbol}/USDG; hook fees power the flywheel below.</li>
           <li>Buy fee starts at 95% and decays −1%/min to 10%. Sell fee is fixed 10%.</li>
           <li>Fee split from hook net: 10% ops · 27% treasury · 63% lot fund.</li>
           <li>Keeper automates executeLot, closePosition, buyback, and stale liquidation (7 days).</li>
@@ -34,7 +34,7 @@ export function DocsPage() {
         <div className="post-body">
           <div className="post-meta">
             <span className="chain-badge">Robinhood Chain · 4663</span>
-            &nbsp;·&nbsp; docs · NVDA Strategy v2
+            &nbsp;·&nbsp; docs · {env.tokenSymbol}
           </div>
           <h2 className="post-title">How DUMB MONEY works</h2>
           <div className="post-text">
@@ -44,7 +44,7 @@ export function DocsPage() {
             <p><strong>Lot statuses:</strong> Accumulating → Ready → NvdaPurchased → LPActive → LPConverted → Repositioning → Closed.</p>
           </div>
           <div className="post-footer">
-            <span className="num">NVDA Strategy v2</span> &nbsp;·&nbsp; not financial advice
+            <span className="num">{env.tokenSymbol}</span> &nbsp;·&nbsp; not financial advice
           </div>
         </div>
       </section>
@@ -53,7 +53,6 @@ export function DocsPage() {
         <p style={{ fontSize: 'var(--fs-small)' }}>
           <Link to="/swap">SWAP</Link> — trade USDG ↔ {env.tokenSymbol} &nbsp;·&nbsp;
           <Link to="/lots">LOTS</Link> — protocol NVDA positions &nbsp;·&nbsp;
-          <Link to="/charts">CHARTS</Link> — pool prices &nbsp;·&nbsp;
           <Link to="/claim">CLAIM</Link> — Treasury dividends
         </p>
       </Module>

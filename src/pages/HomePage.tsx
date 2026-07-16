@@ -14,7 +14,7 @@ export function HomePage() {
     >
       <Module title="Welcome to DUMB MONEY" announce>
         <p style={{ fontSize: 'var(--fs-body)' }}>
-          <strong>NVDA Strategy v2</strong> on Robinhood Chain. Swap {env.tokenSymbol}, fees buy NVDA and open LP — when LP goes 100% USDG, close → buyback → burn.
+          <strong>{env.tokenSymbol}</strong> on Robinhood Chain. Swap {env.tokenSymbol}, fees buy NVDA and open LP — when LP goes 100% USDG, close → buyback → burn.
         </p>
         <p style={{ fontSize: 'var(--fs-small)', marginTop: 6 }}>
           Full protocol docs → <Link to="/docs">DOCS</Link>

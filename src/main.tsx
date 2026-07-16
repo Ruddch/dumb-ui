@@ -8,7 +8,6 @@ import { env } from './config/env';
 import { HomePage } from './pages/HomePage';
 import { SwapPage } from './pages/SwapPage';
 import { LotsPage } from './pages/LotsPage';
-import { ChartsPage } from './pages/ChartsPage';
 import { ClaimPage } from './pages/ClaimPage';
 import { DocsPage } from './pages/DocsPage';
 import './styles/forum.css';
@@ -31,7 +30,6 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<HomePage />} />
           <Route path="/swap" element={<SwapPage />} />
           <Route path="/lots" element={<LotsPage />} />
-          <Route path="/charts" element={<ChartsPage />} />
           <Route path="/claim" element={<ClaimPage />} />
           <Route path="/docs" element={<DocsPage />} />
         </Routes>

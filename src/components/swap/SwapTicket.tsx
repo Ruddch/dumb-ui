@@ -189,15 +189,9 @@ export function SwapTicket({ compact, defaultSide = 'buy', showHistory = !compac
     }
   }, [isSuccess, txHash]);
 
-  const TRADING_PAUSED = true;
-
   const executeSwap = () => {
     setErr('');
     setOk('');
-    if (TRADING_PAUSED) {
-      setErr('Trading is not active yet.');
-      return;
-    }
     if (!isConnected || !address) {
       connect({ connector: injected(), chainId: env.chainId });
       return;
@@ -321,11 +315,11 @@ export function SwapTicket({ compact, defaultSide = 'buy', showHistory = !compac
         <button
           type="submit"
           className={`btn-swap ${side === 'buy' ? 'buy-mode' : 'sell-mode'}`}
-          disabled={TRADING_PAUSED || isPending || confirming || connecting}
-          title={TRADING_PAUSED ? 'Trading is not active' : undefined}
+          disabled={tradingEnabled === false || isPending || confirming || connecting}
+          title={tradingEnabled === false ? 'Trading is not enabled on-chain' : undefined}
         >
-          {TRADING_PAUSED
-            ? 'TRADING NOT ACTIVE'
+          {tradingEnabled === false
+            ? 'TRADING NOT ENABLED'
             : !isConnected
               ? (connecting ? 'CONNECTING…' : 'CONNECT WALLET')
               : isPending || confirming

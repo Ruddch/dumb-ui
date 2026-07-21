@@ -16,6 +16,8 @@ export const env = {
   nvda: import.meta.env.VITE_NVDA as `0x${string}`,
   lotManager: import.meta.env.VITE_LOT_MANAGER as `0x${string}`,
   lpPositionManager: import.meta.env.VITE_LP_POSITION_MANAGER as `0x${string}`,
+  assetExecutor: (import.meta.env.VITE_ASSET_EXECUTOR || '') as `0x${string}` | '',
+  launchManager: (import.meta.env.VITE_LAUNCH_MANAGER || '') as `0x${string}` | '',
   tokenSymbol: (import.meta.env.VITE_TOKEN_SYMBOL as string) || 'NVDASTR',
   usdgDecimals: Number(import.meta.env.VITE_USDG_DECIMALS ?? 6),
   stratDecimals: 18,

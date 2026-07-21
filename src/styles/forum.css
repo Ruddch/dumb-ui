@@ -424,7 +424,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: bold; }
 }
 
 /* Lots */
-.lots-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.lots-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+@media (max-width: 900px) { .lots-summary { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .lots-summary { grid-template-columns: 1fr; } }
 .sum-box { border: 1px solid var(--border); background: var(--surface); padding: 6px 8px; }
 .sum-box .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; }

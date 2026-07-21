@@ -25,8 +25,8 @@ export function useProtocolStats() {
         totalBurned,
         pendingUSDG,
         buybackInfo,
-        , // totalFees
-        , // lotThreshold
+        totalFees,
+        lotThreshold,
         slot0,
       ] = await Promise.all([
         client.readContract({
@@ -77,12 +77,12 @@ export function useProtocolStats() {
         }),
       ]);
 
-      // const stratPriceUsdg = sqrtPriceX96ToPrice(
-      //   slot0[0],
-      //   env.usdgDecimals,
-      //   env.stratDecimals,
-      //   true,
-      // );
+      const stratPriceUsdg = sqrtPriceX96ToPrice(
+        slot0[0],
+        env.usdgDecimals,
+        env.stratDecimals,
+        true,
+      );
 
       return {
         buyFeeBps: Number(buyFeeBps),
@@ -91,11 +91,11 @@ export function useProtocolStats() {
         totalBurned,
         pendingUSDG,
         canBuyback: buybackInfo[0],
-        buybackThreshold: 100n, // buybackInfo[2],
-        totalFees: 0n, // totalFees,
-        lotThreshold: 100000000n,
-        stratPriceUsdg: 0,
-        sqrtPriceX96: 0n, // slot0[0],
+        buybackThreshold: buybackInfo[2],
+        totalFees,
+        lotThreshold,
+        stratPriceUsdg,
+        sqrtPriceX96: slot0[0],
         tick: slot0[1],
       };
     },

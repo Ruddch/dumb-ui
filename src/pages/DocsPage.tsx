@@ -306,22 +306,19 @@ export function DocsPage() {
               <tr><th>Contract</th><th>Address</th></tr>
             </thead>
             <tbody>
-              <tr><td>{S} token</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Strategy hook</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Fee collector</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Lot manager</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Asset executor</td><td><ExplorerAddr /></td></tr>
-              <tr><td>LP position manager</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Buyback manager</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Treasury</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Swap executor</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Lot reader</td><td><ExplorerAddr /></td></tr>
-              <tr><td>Launch manager</td><td><ExplorerAddr /></td></tr>
+              <tr><td>{S} token</td><td><ExplorerAddr address={env.stratToken} /></td></tr>
+              <tr><td>Strategy hook</td><td><ExplorerAddr address={env.strategyHook} /></td></tr>
+              <tr><td>Fee collector</td><td><ExplorerAddr address={env.feeCollector} /></td></tr>
+              <tr><td>Lot manager</td><td><ExplorerAddr address={env.lotManager} /></td></tr>
+              <tr><td>Asset executor</td><td><ExplorerAddr address={env.assetExecutor} /></td></tr>
+              <tr><td>LP position manager</td><td><ExplorerAddr address={env.lpPositionManager} /></td></tr>
+              <tr><td>Buyback manager</td><td><ExplorerAddr address={env.buybackManager} /></td></tr>
+              <tr><td>Treasury</td><td><ExplorerAddr address={env.treasury} /></td></tr>
+              <tr><td>Swap executor</td><td><ExplorerAddr address={env.v4SwapExecutor} /></td></tr>
+              <tr><td>Lot reader</td><td><ExplorerAddr address={env.lotReader} /></td></tr>
+              <tr><td>Launch manager</td><td><ExplorerAddr address={env.launchManager} /></td></tr>
             </tbody>
           </table>
-          <p style={{ fontSize: 'var(--fs-small)', color: 'var(--muted)', marginTop: 8 }}>
-            Addresses will be filled in after deploy.
-          </p>
         </div>
       </Module>
 

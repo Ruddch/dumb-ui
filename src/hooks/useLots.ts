@@ -16,6 +16,9 @@ export type ActiveLot = {
   sellAtSqrtPriceX96: bigint;
   fullyConverted: boolean;
   openedAt: bigint;
+  /** 0–10000 from LotReader (do not recompute from ticks in UI). */
+  conversionProgressBps: bigint;
+  nvdaIsToken0: boolean;
 };
 
 export type ClosedLot = {

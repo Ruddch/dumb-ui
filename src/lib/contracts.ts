@@ -182,6 +182,9 @@ export const lotReaderAbi = [
           { name: 'sellAtSqrtPriceX96', type: 'uint160' },
           { name: 'fullyConverted', type: 'bool' },
           { name: 'openedAt', type: 'uint256' },
+          /** 0–10000; UI progress % = conversionProgressBps / 100 */
+          { name: 'conversionProgressBps', type: 'uint256' },
+          { name: 'nvdaIsToken0', type: 'bool' },
         ],
       },
     ],

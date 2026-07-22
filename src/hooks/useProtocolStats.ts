@@ -18,10 +18,12 @@ export function useProtocolStats() {
     queryFn: async () => {
       if (!client) throw new Error('No client');
 
+      const poolId = env.stratUsdgPoolId;
+
       const [
         buyFeeBps,
         sellFeeBps,
-        launchTimestamp,
+        poolCfg,
         totalBurned,
         pendingUSDG,
         buybackInfo,
@@ -33,16 +35,19 @@ export function useProtocolStats() {
           address: env.strategyHook,
           abi: strategyHookAbi,
           functionName: 'calculateBuyFeeBps',
+          args: [poolId],
         }),
         client.readContract({
           address: env.strategyHook,
           abi: strategyHookAbi,
           functionName: 'calculateSellFeeBps',
+          args: [poolId],
         }),
         client.readContract({
           address: env.strategyHook,
           abi: strategyHookAbi,
-          functionName: 'launchTimestamp',
+          functionName: 'pools',
+          args: [poolId],
         }),
         client.readContract({
           address: env.buybackManager,
@@ -73,7 +78,7 @@ export function useProtocolStats() {
           address: env.stateView,
           abi: stateViewAbi,
           functionName: 'getSlot0',
-          args: [env.stratUsdgPoolId],
+          args: [poolId],
         }),
       ]);
 
@@ -87,7 +92,7 @@ export function useProtocolStats() {
       return {
         buyFeeBps: Number(buyFeeBps),
         sellFeeBps: Number(sellFeeBps),
-        launchTimestamp,
+        launchTimestamp: poolCfg[2],
         totalBurned,
         pendingUSDG,
         canBuyback: buybackInfo[0],

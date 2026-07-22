@@ -34,22 +34,27 @@ export const strategyHookAbi = [
     type: 'function',
     name: 'calculateBuyFeeBps',
     stateMutability: 'view',
-    inputs: [],
+    inputs: [{ name: 'id', type: 'bytes32' }],
     outputs: [{ type: 'uint128' }],
   },
   {
     type: 'function',
     name: 'calculateSellFeeBps',
     stateMutability: 'view',
-    inputs: [],
+    inputs: [{ name: 'id', type: 'bytes32' }],
     outputs: [{ type: 'uint128' }],
   },
   {
     type: 'function',
-    name: 'launchTimestamp',
+    name: 'pools',
     stateMutability: 'view',
-    inputs: [],
-    outputs: [{ type: 'uint256' }],
+    inputs: [{ name: 'id', type: 'bytes32' }],
+    outputs: [
+      { name: 'stratToken', type: 'address' },
+      { name: 'strategyId', type: 'uint256' },
+      { name: 'launchTimestamp', type: 'uint256' },
+      { name: 'active', type: 'bool' },
+    ],
   },
 ] as const;
 

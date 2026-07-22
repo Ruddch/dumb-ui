@@ -30,6 +30,9 @@ export function ClaimPage() {
 
   const claimableEpoch = treasury.data?.claimableEpoch ?? 0n;
   const epoch = treasury.data?.epoch;
+  const currentEpochInfo = treasury.data?.currentEpochInfo;
+  const nvdaBalance = treasury.data?.nvdaBalance ?? 0n;
+  const accumulated = currentEpochInfo?.totalDividends ?? nvdaBalance;
   const userClaim = treasury.data?.userClaim;
   const epochDays = treasury.data?.epochDuration
     ? Number(treasury.data.epochDuration) / 86400
@@ -148,14 +151,6 @@ export function ClaimPage() {
         <StatRow label="Claim window" value="previous epoch only" />
         <StatRow label="Leaf hash" value="keccak256(addr, weight, amt)" />
       </Module>
-      <Module title="Manifest">
-        <p style={{ fontSize: 'var(--fs-small)' }}>
-          Proofs are served off-chain. Set <code>VITE_DIVIDENDS_MANIFEST_URL</code> with <code>{'{epochId}'}</code> placeholder, e.g.:
-        </p>
-        <pre style={{ fontSize: 9, marginTop: 6, fontFamily: 'var(--font-mono)', wordBreak: 'break-all' }}>
-          https://api.example.com/dividends/epoch-{'{epochId}'}.json
-        </pre>
-      </Module>
     </>
   );
 
@@ -172,6 +167,10 @@ export function ClaimPage() {
 
       <div className="lots-summary">
         <div className="sum-box">
+          <div className="lbl">Accumulated</div>
+          <div className="val num up">{formatTokenAmount(accumulated, env.nvdaDecimals, 4)} NVDA</div>
+        </div>
+        <div className="sum-box">
           <div className="lbl">Current epoch</div>
           <div className="val num">{treasury.data?.currentEpoch?.toString() ?? '—'}</div>
         </div>
@@ -186,6 +185,30 @@ export function ClaimPage() {
           </div>
         </div>
       </div>
+
+      {currentEpochInfo && currentEpochInfo.epochId > 0n && (
+        <Module title={`Epoch #${currentEpochInfo.epochId.toString()} — accumulating`}>
+          <StatRow
+            label="Dividends this epoch"
+            value={`${formatTokenAmount(currentEpochInfo.totalDividends, env.nvdaDecimals, 4)} NVDA`}
+            tone="up"
+          />
+          <StatRow
+            label="Treasury NVDA balance"
+            value={`${formatTokenAmount(nvdaBalance, env.nvdaDecimals, 4)} NVDA`}
+          />
+          {currentEpochInfo.startTime > 0n && (
+            <StatRow
+              label="Started"
+              value={new Date(Number(currentEpochInfo.startTime) * 1000).toLocaleString()}
+            />
+          )}
+          <StatRow
+            label="Status"
+            value={currentEpochInfo.endTime > 0n ? 'ended — awaiting finalize' : 'open · deposits accruing'}
+          />
+        </Module>
+      )}
 
       {epoch && claimableEpoch > 0n && (
         <Module title={`Epoch #${claimableEpoch.toString()} snapshot`}>
@@ -210,9 +233,11 @@ export function ClaimPage() {
       )}
 
       {claimableEpoch === 0n && !treasury.isLoading && (
-        <Module title="Nothing to claim">
+        <Module title="Nothing to claim yet">
           <p style={{ fontSize: 'var(--fs-small)' }}>
-            No finalized claimable epoch. Treasury pays out NVDA after owner finalizes the previous epoch with a Merkle root.
+            No finalized claimable epoch. Dividends are accumulating in the current epoch
+            ({formatTokenAmount(accumulated, env.nvdaDecimals, 4)} NVDA so far) and become claimable
+            after the owner ends &amp; finalizes it with a Merkle root.
           </p>
         </Module>
       )}
